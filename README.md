@@ -10,13 +10,31 @@ This plugin automatically instruments every BPMN process execution in CIB seven 
 - **Distributed traces** (spans per process instance and per task) → Jaeger / Grafana Tempo
 - **Metrics** (counters, histograms for start/end/duration/outcome) → Prometheus / Grafana
 
-**Zero changes to BPMN files required.** Add one Maven dependency and you're done.
+**Zero changes to BPMN files required.** Add a few Maven dependencies and you're done.
 
 ---
 
 ## Quick Start
 
-### 1. Add the dependency
+### 1. Add the dependencies
+
+Add the OpenTelemetry Instrumentation BOM to your `<dependencyManagement>` section:
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-instrumentation-bom</artifactId>
+            <version>2.10.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+Then add the plugin and the OpenTelemetry Spring Boot starter to your `<dependencies>`:
 
 ```xml
 <dependency>
@@ -24,7 +42,20 @@ This plugin automatically instruments every BPMN process execution in CIB seven 
     <artifactId>cibseven-opentelemetry-plugin</artifactId>
     <version>1.0.0</version>
 </dependency>
+
+<dependency>
+    <groupId>io.opentelemetry.instrumentation</groupId>
+    <artifactId>opentelemetry-spring-boot-starter</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
 ```
+
+> **Note:** The `spring-boot-starter-logging` exclusion prevents conflicts with your application's existing logging configuration.
 
 ### 2. Configure your `application.properties`
 
