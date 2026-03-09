@@ -50,7 +50,7 @@ Then add the plugin and the OpenTelemetry Spring Boot starter to your `<dependen
 <dependency>
     <groupId>org.cibseven.community</groupId>
     <artifactId>cibseven-opentelemetry-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
 </dependency>
 
 <dependency>
