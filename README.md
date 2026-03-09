@@ -137,8 +137,8 @@ docker-compose up -d
 
 Then open:
 - **Jaeger UI** → http://localhost:16686
-- **Grafana**   → http://localhost:3000 (admin / admin)
-- **Prometheus**→ http://localhost:9090
+
+The example sends traces directly to Jaeger via OTLP — no separate OTel Collector needed.
 
 ---
 
