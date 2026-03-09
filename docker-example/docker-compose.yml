@@ -1,0 +1,79 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CIB seven + OpenTelemetry full observability example stack
+#
+# Services:
+#   cibseven      — BPM engine with the OTel plugin on classpath
+#   otel-collector — receives OTLP, forwards to Jaeger + Prometheus
+#   jaeger         — trace UI  → http://localhost:16686
+#   prometheus     — metrics   → http://localhost:9090
+#   grafana        — dashboards → http://localhost:3000  (admin/admin)
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── CIB seven BPM Engine ─────────────────────────────────────────────────
+  cibseven:
+    image: cibseven/cibseven:latest
+    ports:
+      - "8080:8080"
+    environment:
+      # Point OTel SDK to our collector
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4318"
+      OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
+      OTEL_SERVICE_NAME: "cibseven-bpm"
+      OTEL_TRACES_EXPORTER: "otlp"
+      OTEL_METRICS_EXPORTER: "otlp"
+      OTEL_LOGS_EXPORTER: "otlp"
+      OTEL_TRACES_SAMPLER: "parentbased_always_on"
+    depends_on:
+      - otel-collector
+
+  # ── OpenTelemetry Collector ───────────────────────────────────────────────
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otel-config.yaml"]
+    volumes:
+      - ./otel-config.yaml:/etc/otel-config.yaml
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "8889:8889"   # Prometheus scrape endpoint
+    depends_on:
+      - jaeger
+      - prometheus
+
+  # ── Jaeger (trace UI) ─────────────────────────────────────────────────────
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "14250:14250"  # gRPC from collector
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+
+  # ── Prometheus (metrics) ──────────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  # ── Grafana (dashboards) ──────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - jaeger
+
+volumes:
+  grafana-data:
