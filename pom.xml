@@ -15,7 +15,7 @@
         OpenTelemetry instrumentation plugin for CIB seven (Camunda 7 fork).
         Automatically instruments BPMN process execution with traces and metrics.
     </description>
-    <url>https://github.com/cibseven-community-hub/cibseven-opentelemetry-plugin</url>
+    <url>https://github.com/krixerx/cibseven-opentelemetry-plugin</url>
 
     <licenses>
         <license>
@@ -26,16 +26,15 @@
 
     <developers>
         <developer>
-            <name>CIB seven Community</name>
-            <organization>cibseven-community-hub</organization>
-            <organizationUrl>https://github.com/cibseven-community-hub</organizationUrl>
+            <name>krixerx</name>
+            <url>https://github.com/krixerx</url>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/cibseven-community-hub/cibseven-opentelemetry-plugin.git</connection>
-        <developerConnection>scm:git:ssh://github.com:cibseven-community-hub/cibseven-opentelemetry-plugin.git</developerConnection>
-        <url>https://github.com/cibseven-community-hub/cibseven-opentelemetry-plugin</url>
+        <connection>scm:git:git://github.com/krixerx/cibseven-opentelemetry-plugin.git</connection>
+        <developerConnection>scm:git:ssh://github.com:krixerx/cibseven-opentelemetry-plugin.git</developerConnection>
+        <url>https://github.com/krixerx/cibseven-opentelemetry-plugin</url>
     </scm>
 
     <distributionManagement>
