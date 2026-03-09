@@ -16,6 +16,16 @@ This plugin automatically instruments every BPMN process execution in CIB seven 
 
 ## Quick Start
 
+> [!CAUTION]
+> **This plugin is not yet published to Maven Central or the CIB seven community Maven repository.**
+> Publishing is currently in progress. To use it now, you must build and install it locally:
+> ```bash
+> git clone https://github.com/krixerx/cibseven-opentelemetry-plugin.git
+> cd cibseven-opentelemetry-plugin
+> mvn clean install
+> ```
+> This installs the artifact into your local `~/.m2` repository, making it available to your projects.
+
 ### 1. Add the dependencies
 
 Add the OpenTelemetry Instrumentation BOM to your `<dependencyManagement>` section:
